@@ -1,0 +1,48 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appServiceName": {
+      "value": "TeamsBotApp123"
+    },
+    "existingAppServicePlanName": {
+      "value": "TeamsBotServicePlan"
+    },
+    "existingAppServicePlanLocation": {
+      "value": "Canada Central"
+    },
+    "newAppServicePlanName": {
+      "value": ""
+    },
+    "newAppServicePlanLocation": {
+      "value": ""
+    },
+    "newAppServicePlanSku": {
+      "value": {
+        "name": "S1",
+        "tier": "Standard",
+        "size": "S1",
+        "family": "S",
+        "capacity": 1
+      }
+    },
+    "appType": {
+      "value": "UserAssignedMSI"
+    },
+    "appId": {
+      "value": ""
+    },
+    "appSecret": {
+      "value": ""
+    },
+    "UMSIName": {
+      "value": "TeamsBotAzureBot"
+    },
+    "UMSIResourceGroupName": {
+      "value": "TeamsBotGroup"
+    },
+    "tenantId": {
+      "value": "4c037608-1504-4906-9db3-ee4391e245dc"
+    }
+  }
+}
