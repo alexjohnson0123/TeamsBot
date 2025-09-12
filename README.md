@@ -1,8 +1,8 @@
 # my-teams-bot
 
-Chat on teams
+Chat on teams with a Snowflake Cortex LLM.
 
-This bot has been created using [Bot Framework](https://dev.botframework.com), it shows how to create a simple bot that accepts input from the user and echoes it back.
+This bot has been created using [Bot Framework](https://dev.botframework.com), it is used to communicate with a Snowflake Cortex LLM through Microsoft Teams messages.
 
 ## Prerequisites
 
