@@ -1,14 +1,16 @@
 const { ActivityHandler, MessageFactory } = require('botbuilder');
 
 class CortexBot extends ActivityHandler {
+    #accessToken;
+    
     constructor() {
         super();
 
-        this.accessToken = ""
+        this.#accessToken = ""
 
         // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
         this.onMessage(async (context, next) => {
-            await this.#AskLLM(context.activity.text)
+            await askLLM(this.#accessToken, context.activity.text)
                 .then(replyText => context.sendActivity(MessageFactory.text(replyText, replyText)));
             // By calling next() you ensure that the next BotHandler is run.
             await next();
@@ -27,31 +29,31 @@ class CortexBot extends ActivityHandler {
         });
     }
 
-    setAccessToken(foo) {
-        this.accessToken = foo;
+    setAccessToken(accessToken) {
+        this.#accessToken = accessToken;
     }
 
-    async #AskLLM(queryText) {
-        const accessToken = this.accessToken;
+}
 
-        const response = await fetch("https://uhortkh-xqa72614.snowflakecomputing.com/api/v2/cortex/inference:complete", {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-Snowflake-Authorization-Token-Type': 'PROGRAMMATIC_ACCESS_TOKEN'
-            },
-            body: JSON.stringify({
-                'model': 'llama3.1-405b',
-                'messages': [{'content': queryText, 'role':'user'}],
-                'stream': false,
-            })
-        });
+async function askLLM(accessToken, queryText) {
 
-        const json = await response.json();
-        return json.choices[0].message.content;
-    }
+    const response = await fetch("https://uhortkh-xqa72614.snowflakecomputing.com/api/v2/cortex/inference:complete", {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-Snowflake-Authorization-Token-Type': 'PROGRAMMATIC_ACCESS_TOKEN'
+        },
+        body: JSON.stringify({
+            'model': 'llama3.1-405b',
+            'messages': [{'content': queryText, 'role':'user'}],
+            'stream': false,
+        })
+    });
+
+    const json = await response.json();
+    return json.choices[0].message.content;
 }
 
 module.exports.CortexBot = CortexBot;
