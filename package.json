@@ -18,7 +18,8 @@
     "dependencies": {
         "botbuilder": "~4.22.1",
         "dotenv": "~8.2.0",
-        "restify": "~11.1.0"
+        "restify": "~11.1.0",
+        "snowflake-sdk": "^2.3.0"
     },
     "devDependencies": {
         "eslint": "^7.0.0",

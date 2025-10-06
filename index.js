@@ -62,31 +62,23 @@ const onTurnErrorHandler = async (context, error) => {
 // Set the onTurnError for the singleton CloudAdapter.
 adapter.onTurnError = onTurnErrorHandler;
 
-async function main() {
-    // Create the main dialog.
-    const myBot = await CortexBot.createBot(
-        process.env.OAUTH_CLIENT_ID,
-        process.env.OAUTH_CLIENT_SECRET,
-        process.env.AZURE_AD_TENNANT_ID,
-        process.env.AZURE_RESOURCE_URI
-    );
 
-    // Listen for incoming requests.
-    server.post('/api/messages', async (req, res) => {
-        // Route received a request to adapter for processing
-        await adapter.process(req, res, (context) => myBot.run(context));
-    });
+// Create the main dialog.
+const myBot = new CortexBot(); 
 
-    // Listen for Upgrade requests for Streaming.
-    server.on('upgrade', async (req, socket, head) => {
-        // Create an adapter scoped to this WebSocket connection to allow storing session data.
-        const streamingAdapter = new CloudAdapter(botFrameworkAuthentication);
+// Listen for incoming requests.
+server.post('/api/messages', async (req, res) => {
+    // Route received a request to adapter for processing
+    await adapter.process(req, res, (context) => myBot.run(context));
+});
 
-        // Set onTurnError for the CloudAdapter created for each connection.
-        streamingAdapter.onTurnError = onTurnErrorHandler;
+// Listen for Upgrade requests for Streaming.
+server.on('upgrade', async (req, socket, head) => {
+    // Create an adapter scoped to this WebSocket connection to allow storing session data.
+    const streamingAdapter = new CloudAdapter(botFrameworkAuthentication);
 
-        await streamingAdapter.process(req, socket, head, (context) => myBot.run(context));
-    });
-}
+    // Set onTurnError for the CloudAdapter created for each connection.
+    streamingAdapter.onTurnError = onTurnErrorHandler;
 
-main();
+    await streamingAdapter.process(req, socket, head, (context) => myBot.run(context));
+});
